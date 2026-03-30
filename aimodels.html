@@ -14,39 +14,54 @@
       padding: 32px 24px;
     }
 
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
+    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
 
     .subtitle {
       font-size: 0.875rem;
       color: #6b7280;
-      margin-bottom: 20px;
+      margin-bottom: 6px;
     }
+    .subtitle a { color: #4f46e5; text-decoration: none; }
+    .subtitle a:hover { text-decoration: underline; }
 
-    .updated {
-      font-size: 0.75rem;
-      color: #9ca3af;
+    .updated { font-size: 0.75rem; color: #9ca3af; margin-bottom: 20px; }
+
+    /* Intro / legend */
+    .intro {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px 20px;
       margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: #374151;
+      line-height: 1.6;
     }
+    .intro p { margin-bottom: 10px; }
+    .intro p:last-child { margin-bottom: 0; }
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 6px 20px;
+    }
+    .legend-item { display: flex; gap: 8px; align-items: flex-start; }
+    .legend-icon { flex-shrink: 0; width: 22px; text-align: center; }
+    .legend-text strong { font-weight: 600; }
 
-    /* Filter bar */
+    /* Filters */
     .filters {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       align-items: center;
     }
-
     input[type="text"] {
       padding: 8px 12px;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 0.875rem;
-      width: 240px;
+      width: 220px;
       outline: none;
       background: #fff;
     }
@@ -63,10 +78,44 @@
     }
     select:focus { border-color: #6366f1; }
 
-    .count {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-left: auto;
+    .count { font-size: 0.8rem; color: #6b7280; margin-left: auto; }
+
+    /* Capability toggles */
+    .cap-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+    .cap-filters span { font-size: 0.78rem; color: #6b7280; margin-right: 2px; }
+    .toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1.5px solid #e5e7eb;
+      background: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #374151;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .toggle-btn:hover { border-color: #a5b4fc; background: #f5f3ff; }
+    .toggle-btn.active {
+      background: #4f46e5;
+      border-color: #4f46e5;
+      color: #fff;
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-align: right;
+      margin-bottom: 4px;
     }
 
     /* Table */
@@ -76,18 +125,20 @@
       border: 1px solid #e5e7eb;
       background: #fff;
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.82rem;
+      min-width: 720px;
     }
 
     thead { background: #f3f4f6; }
 
     th {
-      padding: 10px 10px;
+      padding: 10px 12px;
       text-align: left;
       font-weight: 600;
       color: #374151;
@@ -101,12 +152,11 @@
     th.sorted .sort-icon { opacity: 1; }
 
     td {
-      padding: 9px 10px;
+      padding: 9px 12px;
       border-bottom: 1px solid #f3f4f6;
       white-space: nowrap;
       vertical-align: middle;
     }
-
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #f9fafb; }
 
@@ -126,15 +176,16 @@
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
-    .p-openai  { background: #d1fae5; color: #065f46; }
+    .p-openai    { background: #d1fae5; color: #065f46; }
     .p-anthropic { background: #fce7f3; color: #9d174d; }
-    .p-google  { background: #dbeafe; color: #1e40af; }
-    .p-meta    { background: #ede9fe; color: #5b21b6; }
-    .p-deepseek { background: #fff7ed; color: #c2410c; }
-    .p-xai     { background: #f1f5f9; color: #334155; }
+    .p-google    { background: #dbeafe; color: #1e40af; }
+    .p-meta      { background: #ede9fe; color: #5b21b6; }
+    .p-meta-llama { background: #ede9fe; color: #5b21b6; }
+    .p-deepseek  { background: #fff7ed; color: #c2410c; }
+    .p-xai       { background: #f1f5f9; color: #334155; }
     .p-perplexity { background: #ecfdf5; color: #14532d; }
-    .p-qwen    { background: #fef9c3; color: #713f12; }
-    .p-other   { background: #f3f4f6; color: #374151; }
+    .p-qwen      { background: #fef9c3; color: #713f12; }
+    .p-other     { background: #f3f4f6; color: #374151; }
 
     .mode-badge {
       display: inline-block;
@@ -146,17 +197,16 @@
       color: #166534;
       border: 1px solid #bbf7d0;
     }
-    .mode-badge.image_generation { background: #fdf4ff; color: #7e22ce; border-color: #e9d5ff; }
-    .mode-badge.embedding        { background: #f0f9ff; color: #0369a1; border-color: #bae6fd; }
+    .mode-badge.image_generation   { background: #fdf4ff; color: #7e22ce; border-color: #e9d5ff; }
+    .mode-badge.embedding          { background: #f0f9ff; color: #0369a1; border-color: #bae6fd; }
     .mode-badge.audio_transcription { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
-    .mode-badge.completion       { background: #fefce8; color: #854d0e; border-color: #fef08a; }
-    .mode-badge.responses        { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+    .mode-badge.completion         { background: #fefce8; color: #854d0e; border-color: #fef08a; }
+    .mode-badge.responses          { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
 
     .cap { text-align: center; }
     .yes { color: #16a34a; font-size: 1rem; }
     .no  { color: #d1d5db; font-size: 0.9rem; }
 
-    /* States */
     .state { text-align: center; padding: 60px 20px; color: #6b7280; font-size: 0.95rem; }
     .spinner {
       width: 32px; height: 32px;
@@ -173,15 +223,31 @@
 <body>
 
   <h1>Supported AI Models</h1>
-  <p class="subtitle">All models available through the MacPaw AI API</p>
+  <p class="subtitle">All models available through the <a href="https://api.macpaw.com/ai/api/v1/model/info" target="_blank">MacPaw AI API</a></p>
   <div class="updated" id="updated"></div>
 
+
+  <!-- Filters -->
   <div class="filters">
     <input type="text" id="search" placeholder="Search model name…" />
     <select id="providerFilter"><option value="">All providers</option></select>
     <select id="modeFilter"><option value="">All modes</option></select>
     <span class="count" id="count"></span>
   </div>
+
+  <!-- Capability toggles -->
+  <div class="cap-filters">
+    <span>Show only models with:</span>
+    <button class="toggle-btn" data-cap="supports_vision">👁 Vision</button>
+    <button class="toggle-btn" data-cap="supports_function_calling">⚙️ Tools</button>
+    <button class="toggle-btn" data-cap="supports_reasoning">🧠 Reasoning</button>
+    <button class="toggle-btn" data-cap="supports_web_search">🔍 Search</button>
+    <button class="toggle-btn" data-cap="supports_native_streaming">⚡ Stream</button>
+    <button class="toggle-btn" data-cap="supports_prompt_caching">💾 Cache</button>
+    <button class="toggle-btn" data-cap="supports_pdf_input">📄 PDF</button>
+  </div>
+
+  <div class="scroll-hint">← scroll to see all columns →</div>
 
   <div class="table-wrap">
     <table id="tbl">
@@ -191,7 +257,7 @@
           <th data-col="provider">Provider <span class="sort-icon">↕</span></th>
           <th data-col="mode">Mode <span class="sort-icon">↕</span></th>
           <th class="cap" title="Vision">👁 Vision</th>
-          <th class="cap" title="Function Calling">⚙️ Tools</th>
+          <th class="cap" title="Tools">⚙️ Tools</th>
           <th class="cap" title="Reasoning">🧠 Reasoning</th>
           <th class="cap" title="Web Search">🔍 Search</th>
           <th class="cap" title="Streaming">⚡ Stream</th>
@@ -208,20 +274,18 @@
 <script>
 const API = 'https://api.macpaw.com/ai/api/v1/model/info';
 let allModels = [], sortCol = 'model_name', sortAsc = true;
+let activeCaps = new Set();
 
 const providerColors = {
   openai: 'p-openai', anthropic: 'p-anthropic', google: 'p-google',
-  meta: 'p-meta', 'meta-llama': 'p-meta', deepseek: 'p-deepseek',
+  meta: 'p-meta', 'meta-llama': 'p-meta-llama', deepseek: 'p-deepseek',
   'x-ai': 'p-xai', perplexity: 'p-perplexity', qwen: 'p-qwen'
 };
 
 function cap(val) {
   return val === true ? '<span class="yes">✓</span>' : '<span class="no">—</span>';
 }
-
-function providerOf(name) {
-  return name.split('/')[0] || 'other';
-}
+function providerOf(name) { return name.split('/')[0] || 'other'; }
 
 function renderRow(m) {
   const info = m.model_info || {};
@@ -250,6 +314,9 @@ function filtered() {
     if (q && !m.model_name.toLowerCase().includes(q)) return false;
     if (pf && providerOf(m.model_name) !== pf) return false;
     if (mf && (m.model_info?.mode || '') !== mf) return false;
+    for (const c of activeCaps) {
+      if (m.model_info?.[c] !== true) return false;
+    }
     return true;
   });
 }
@@ -299,7 +366,7 @@ async function load() {
   }
 }
 
-// Sort on header click
+// Sort
 document.querySelectorAll('th[data-col]').forEach(th => {
   th.addEventListener('click', () => {
     const col = th.dataset.col;
@@ -311,9 +378,20 @@ document.querySelectorAll('th[data-col]').forEach(th => {
   });
 });
 
+// Dropdown filters
 ['search','providerFilter','modeFilter'].forEach(id =>
   document.getElementById(id).addEventListener('input', render)
 );
+
+// Capability toggles
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const c = btn.dataset.cap;
+    if (activeCaps.has(c)) { activeCaps.delete(c); btn.classList.remove('active'); }
+    else { activeCaps.add(c); btn.classList.add('active'); }
+    render();
+  });
+});
 
 load();
 </script>
