@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supported AI Models</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      padding: 32px 24px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .updated {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-bottom: 20px;
+    }
+
+    /* Filter bar */
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      width: 240px;
+      outline: none;
+      background: #fff;
+    }
+    input[type="text"]:focus { border-color: #6366f1; box-shadow: 0 0 0 2px #e0e7ff; }
+
+    select {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      background: #fff;
+      outline: none;
+      cursor: pointer;
+    }
+    select:focus { border-color: #6366f1; }
+
+    .count {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-left: auto;
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      min-width: 900px;
+    }
+
+    thead { background: #f3f4f6; }
+
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      white-space: nowrap;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      user-select: none;
+    }
+    th:hover { background: #e9ecef; }
+    th .sort-icon { margin-left: 4px; opacity: 0.4; font-size: 0.75rem; }
+    th.sorted .sort-icon { opacity: 1; }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #f3f4f6;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+
+    .model-name {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: #1d4ed8;
+      font-weight: 500;
+    }
+
+    .provider-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .p-openai  { background: #d1fae5; color: #065f46; }
+    .p-anthropic { background: #fce7f3; color: #9d174d; }
+    .p-google  { background: #dbeafe; color: #1e40af; }
+    .p-meta    { background: #ede9fe; color: #5b21b6; }
+    .p-deepseek { background: #fff7ed; color: #c2410c; }
+    .p-xai     { background: #f1f5f9; color: #334155; }
+    .p-perplexity { background: #ecfdf5; color: #14532d; }
+    .p-qwen    { background: #fef9c3; color: #713f12; }
+    .p-other   { background: #f3f4f6; color: #374151; }
+
+    .mode-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .mode-badge.image_generation { background: #fdf4ff; color: #7e22ce; border-color: #e9d5ff; }
+    .mode-badge.embedding        { background: #f0f9ff; color: #0369a1; border-color: #bae6fd; }
+    .mode-badge.audio_transcription { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+    .mode-badge.completion       { background: #fefce8; color: #854d0e; border-color: #fef08a; }
+    .mode-badge.responses        { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+
+    .cap { text-align: center; }
+    .yes { color: #16a34a; font-size: 1rem; }
+    .no  { color: #d1d5db; font-size: 0.9rem; }
+
+    /* States */
+    .state { text-align: center; padding: 60px 20px; color: #6b7280; font-size: 0.95rem; }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <h1>Supported AI Models</h1>
+  <p class="subtitle">All models available through the MacPaw AI API</p>
+  <div class="updated" id="updated"></div>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search model name…" />
+    <select id="providerFilter"><option value="">All providers</option></select>
+    <select id="modeFilter"><option value="">All modes</option></select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th data-col="model_name">Model <span class="sort-icon">↕</span></th>
+          <th data-col="provider">Provider <span class="sort-icon">↕</span></th>
+          <th data-col="mode">Mode <span class="sort-icon">↕</span></th>
+          <th class="cap" title="Vision">👁 Vision</th>
+          <th class="cap" title="Function Calling">⚙️ Tools</th>
+          <th class="cap" title="Reasoning">🧠 Reasoning</th>
+          <th class="cap" title="Web Search">🔍 Search</th>
+          <th class="cap" title="Streaming">⚡ Stream</th>
+          <th class="cap" title="Prompt Caching">💾 Cache</th>
+          <th class="cap" title="PDF Input">📄 PDF</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="10"><div class="state"><div class="spinner"></div>Loading models…</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+<script>
+const API = 'https://api.macpaw.com/ai/api/v1/model/info';
+let allModels = [], sortCol = 'model_name', sortAsc = true;
+
+const providerColors = {
+  openai: 'p-openai', anthropic: 'p-anthropic', google: 'p-google',
+  meta: 'p-meta', 'meta-llama': 'p-meta', deepseek: 'p-deepseek',
+  'x-ai': 'p-xai', perplexity: 'p-perplexity', qwen: 'p-qwen'
+};
+
+function cap(val) {
+  return val === true ? '<span class="yes">✓</span>' : '<span class="no">—</span>';
+}
+
+function providerOf(name) {
+  return name.split('/')[0] || 'other';
+}
+
+function renderRow(m) {
+  const info = m.model_info || {};
+  const prov = providerOf(m.model_name);
+  const cls = providerColors[prov] || 'p-other';
+  const mode = info.mode || '—';
+  return `<tr>
+    <td class="model-name">${m.model_name}</td>
+    <td><span class="provider-badge ${cls}">${prov}</span></td>
+    <td><span class="mode-badge ${mode}">${mode}</span></td>
+    <td class="cap">${cap(info.supports_vision)}</td>
+    <td class="cap">${cap(info.supports_function_calling)}</td>
+    <td class="cap">${cap(info.supports_reasoning)}</td>
+    <td class="cap">${cap(info.supports_web_search)}</td>
+    <td class="cap">${cap(info.supports_native_streaming)}</td>
+    <td class="cap">${cap(info.supports_prompt_caching)}</td>
+    <td class="cap">${cap(info.supports_pdf_input)}</td>
+  </tr>`;
+}
+
+function filtered() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const pf = document.getElementById('providerFilter').value;
+  const mf = document.getElementById('modeFilter').value;
+  return allModels.filter(m => {
+    if (q && !m.model_name.toLowerCase().includes(q)) return false;
+    if (pf && providerOf(m.model_name) !== pf) return false;
+    if (mf && (m.model_info?.mode || '') !== mf) return false;
+    return true;
+  });
+}
+
+function sorted(arr) {
+  return [...arr].sort((a, b) => {
+    let av, bv;
+    if (sortCol === 'model_name') { av = a.model_name; bv = b.model_name; }
+    else if (sortCol === 'provider') { av = providerOf(a.model_name); bv = providerOf(b.model_name); }
+    else if (sortCol === 'mode') { av = a.model_info?.mode||''; bv = b.model_info?.mode||''; }
+    return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+}
+
+function render() {
+  const rows = sorted(filtered());
+  const tbody = document.getElementById('tbody');
+  document.getElementById('count').textContent = `${rows.length} model${rows.length !== 1 ? 's' : ''}`;
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="10"><div class="state"><div class="error-icon">🔍</div>No models match your filters.</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(renderRow).join('');
+}
+
+function populateFilters(models) {
+  const providers = [...new Set(models.map(m => providerOf(m.model_name)))].sort();
+  const modes = [...new Set(models.map(m => m.model_info?.mode).filter(Boolean))].sort();
+  const pSel = document.getElementById('providerFilter');
+  const mSel = document.getElementById('modeFilter');
+  providers.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; pSel.appendChild(o); });
+  modes.forEach(m => { const o = document.createElement('option'); o.value = m; o.textContent = m; mSel.appendChild(o); });
+}
+
+async function load() {
+  try {
+    const res = await fetch(API);
+    const json = await res.json();
+    allModels = json.data || [];
+    populateFilters(allModels);
+    const now = new Date();
+    document.getElementById('updated').textContent = `Last updated: ${now.toUTCString()}`;
+    render();
+  } catch(e) {
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="10"><div class="state"><div class="error-icon">⚠️</div>Could not load models. Please try again later.</div></td></tr>`;
+  }
+}
+
+// Sort on header click
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortAsc = !sortAsc; else { sortCol = col; sortAsc = true; }
+    document.querySelectorAll('th').forEach(t => t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
+    render();
+  });
+});
+
+['search','providerFilter','modeFilter'].forEach(id =>
+  document.getElementById(id).addEventListener('input', render)
+);
+
+load();
+</script>
+</body>
+</html>
