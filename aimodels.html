@@ -226,7 +226,6 @@
   <p class="subtitle">All models available through the <a href="https://api.macpaw.com/ai/api/v1/model/info" target="_blank">MacPaw AI API</a></p>
   <div class="updated" id="updated"></div>
 
-
   <!-- Filters -->
   <div class="filters">
     <input type="text" id="search" placeholder="Search model name…" />
@@ -245,6 +244,7 @@
     <button class="toggle-btn" data-cap="supports_native_streaming">⚡ Stream</button>
     <button class="toggle-btn" data-cap="supports_prompt_caching">💾 Cache</button>
     <button class="toggle-btn" data-cap="supports_pdf_input">📄 PDF</button>
+
   </div>
 
   <div class="scroll-hint">← scroll to see all columns →</div>
@@ -256,13 +256,13 @@
           <th data-col="model_name">Model <span class="sort-icon">↕</span></th>
           <th data-col="provider">Provider <span class="sort-icon">↕</span></th>
           <th data-col="mode">Mode <span class="sort-icon">↕</span></th>
-          <th class="cap" title="Vision">👁 Vision</th>
-          <th class="cap" title="Tools">⚙️ Tools</th>
-          <th class="cap" title="Reasoning">🧠 Reasoning</th>
-          <th class="cap" title="Web Search">🔍 Search</th>
-          <th class="cap" title="Streaming">⚡ Stream</th>
-          <th class="cap" title="Prompt Caching">💾 Cache</th>
-          <th class="cap" title="PDF Input">📄 PDF</th>
+          <th class="cap">Vision</th>
+          <th class="cap">Tools</th>
+          <th class="cap">Reasoning</th>
+          <th class="cap">Search</th>
+          <th class="cap">Stream</th>
+          <th class="cap">Cache</th>
+          <th class="cap">PDF</th>
         </tr>
       </thead>
       <tbody id="tbody">
